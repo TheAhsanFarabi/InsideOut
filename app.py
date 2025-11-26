@@ -14,57 +14,92 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for a modern look
+# Custom CSS for a lively, streamlined look (Vibrant Accents, No Emojis)
 st.markdown("""
 <style>
     /* Main Streamlit container styling */
     .main .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+        max-width: 800px;
     }
 
     /* Title and Header styling */
     h1 {
-        font-size: 3rem;
-        color: #1a73e8; /* Google Blue */
+        font-size: 3.5rem;
+        color: #FF4B4B; /* Streamlit Red/Vibrant Accent */
         text-align: center;
         margin-bottom: 0.5rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
     
     .stMarkdown p {
-        font-size: 1.1rem;
-        color: #5f6368; /* Grey text */
+        font-size: 1.15rem;
+        color: #333333; /* Darker text for readability */
         text-align: center;
+        line-height: 1.6;
+    }
+
+    /* Subheader for sections */
+    h2, h3 {
+        color: #4CAF50; /* Green Accent */
+        border-bottom: 2px solid #EEEEEE;
+        padding-bottom: 5px;
+        margin-top: 2rem;
     }
 
     /* Info box styling */
     div[data-testid="stAlert"] {
-        border-radius: 0.5rem;
-        border-left: 8px solid #fbbc05; /* Google Yellow */
-    }
-
-    /* File uploader and camera input container */
-    div[data-testid="stFileUploader"] > div:first-child, div[data-testid="stCameraInput"] > div:first-child {
-        border: 2px dashed #dadce0;
         border-radius: 0.75rem;
-        padding: 1.5rem;
-        text-align: center;
-    }
-
-    /* Result image border */
-    div.stImage img {
-        border-radius: 1rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-left: 6px solid #FF4B4B; /* Match Accent */
+        background-color: #FFF0F0;
     }
     
-    /* Emotion label color coding (Optional, can be expanded) */
-    .emotion-Angry { color: #dc3545; }
-    .emotion-Happy { color: #28a745; }
-    .emotion-Surprise { color: #ffc107; }
-    .emotion-Neutral { color: #6c757d; }
-    /* ... add more classes for other emotions */
+    /* Input containers */
+    div[data-testid="stFileUploader"] > div:first-child, div[data-testid="stCameraInput"] > div:first-child {
+        border: 2px dashed #FF4B4B; /* Vibrant dashed border */
+        background-color: #F8F8F8;
+        border-radius: 1rem;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    /* Hover effect for input containers */
+    div[data-testid="stFileUploader"] > div:first-child:hover, div[data-testid="stCameraInput"] > div:first-child:hover {
+        background-color: #EDEDED;
+        box-shadow: 0 4px 12px rgba(255, 75, 75, 0.2);
+    }
+
+    /* Result image border and shadow */
+    div.stImage img {
+        border-radius: 1.5rem;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+    
+    div.stImage img:hover {
+        transform: scale(1.01);
+    }
+    
+    /* Custom Result Box Styling (Lively) */
+    .emotion-result-box {
+        background-color: #E8F5E9; /* Light Green Background */
+        border: 1px solid #C8E6C9;
+        border-radius: 12px;
+        padding: 15px;
+        margin-top: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Emotion label color coding */
+    .emotion-Angry { color: #D32F2F; font-weight: bold; }
+    .emotion-Disgust { color: #7B1FA2; font-weight: bold; }
+    .emotion-Fear { color: #303F9F; font-weight: bold; }
+    .emotion-Happy { color: #FFD600; font-weight: bold; }
+    .emotion-Neutral { color: #616161; font-weight: bold; }
+    .emotion-Sad { color: #1976D2; font-weight: bold; }
+    .emotion-Surprise { color: #FF9800; font-weight: bold; }
 
 </style>
 """, unsafe_allow_html=True)
@@ -72,11 +107,11 @@ st.markdown("""
 # -------------------------
 # Project Title & Overview
 # -------------------------
-st.title("InsideOut: An Emotion Recognition System")
+st.title("InsideOut: Real-Time Emotion Analysis")
 st.markdown("""
-Welcome to **InsideOut**, a real-time emotion recognition system.  
-Upload an image or take a live photo, and let the AI detect facial emotions instantly!  
-Supported emotions: **Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.**
+Welcome to **InsideOut**, a dynamic system designed to instantly analyze facial expressions. 
+Simply provide an image—either by upload or a live photo—and let our AI identify the primary emotion! 
+We detect: **Angry, Disgust, Fear, Happy, Neutral, Sad, and Surprise.**
 """)
 
 # --- Separator ---
@@ -85,7 +120,6 @@ st.markdown("---")
 # -------------------------
 # Constants & Configuration
 # -------------------------
-# Use Pathlib for better path handling
 MODEL_URL = "https://huggingface.co/AhsanFarabi/inside_out/resolve/main/inside_out.h5"
 MODEL_LOCAL_PATH = Path("inside_out.h5")
 CLASS_LABELS = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
@@ -97,40 +131,38 @@ CLASS_LABELS = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise
 def download_and_load_model():
     """Downloads model from URL and loads it along with the face cascade."""
     if not MODEL_LOCAL_PATH.exists():
-        with st.spinner("⏳ Downloading AI model (25MB)... This may take a moment."):
+        with st.spinner("Downloading AI model (25MB)... This may take a moment to establish the connection."):
             try:
                 response = requests.get(MODEL_URL, stream=True)
-                response.raise_for_status() # Check for request errors
+                response.raise_for_status() 
                 with open(MODEL_LOCAL_PATH, "wb") as f:
                     for chunk in response.iter_content(chunk_size=8192):
                         f.write(chunk)
-                st.success("Model downloaded successfully!")
+                st.success("Analysis model loaded successfully!")
             except requests.exceptions.RequestException as e:
-                st.error(f"Error downloading model: {e}. Please check your connection.")
+                st.error(f"Error downloading model: {e}. Please check your connection and refresh.")
                 return None, None
                 
     model = load_model(str(MODEL_LOCAL_PATH))
-    # Load OpenCV's default frontal face detection cascade
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
     return model, face_cascade
 
-# Load resources
 model, face_cascade = download_and_load_model()
 
-# Check if model loading was successful
 if model is None or face_cascade is None:
     st.stop()
 
 # -------------------------
 # Input Options (Using columns for better layout)
 # -------------------------
+st.header("1. Input Image")
 col1, col2 = st.columns(2)
 
 with col1:
-    uploaded_file = st.file_uploader("🖼️ Upload an Image", type=["jpg", "jpeg", "png"])
+    uploaded_file = st.file_uploader("Upload an Image File", type=["jpg", "jpeg", "png"])
 
 with col2:
-    camera_input = st.camera_input("📸 Take a Live Picture")
+    camera_input = st.camera_input("Use Live Camera Snapshot")
 
 # Determine the source of the image data
 image_data = uploaded_file if uploaded_file else camera_input
@@ -142,6 +174,8 @@ st.markdown("---")
 # Processing Image
 # -------------------------
 if image_data is not None:
+    st.header("2. Analysis in Progress")
+    
     # 1. Image Loading and Conversion
     try:
         image = Image.open(image_data).convert("RGB")
@@ -150,93 +184,100 @@ if image_data is not None:
         st.stop()
         
     open_cv_image = np.array(image)
-    # Convert RGB image (from PIL/Streamlit) to BGR (for OpenCV)
     frame = cv2.cvtColor(open_cv_image, cv2.COLOR_RGB2BGR)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # 2. Face Detection
     faces = face_cascade.detectMultiScale(
         gray,
-        scaleFactor=1.1,  # Reduced for slightly better detection
+        scaleFactor=1.1,
         minNeighbors=5,
-        minSize=(30, 30)
+        minSize=(40, 40)
     )
 
     detected_faces_count = len(faces)
     
     if detected_faces_count == 0:
-        st.warning("⚠️ No faces detected in the image. Please try another one.")
+        st.warning("No facial expressions were clearly detected in the image. Please try adjusting the lighting or composition.")
     else:
-        st.success(f"✅ Detected {detected_faces_count} face(s). Processing emotions...")
+        st.info(f"Successfully detected {detected_faces_count} face(s). Generating results...")
         
         # 3. Emotion Prediction and Drawing
+        
+        # Container for results to appear before the image
+        results_container = st.container()
+
         for (x, y, w, h) in faces:
-            # Extract face ROI (Region of Interest)
             face_roi = gray[y:y + h, x:x + w]
             
-            # Preprocessing for the Keras model
+            # Preprocessing
             face_resized = cv2.resize(face_roi, (48, 48))
-            face_resized = np.expand_dims(face_resized, axis=-1)  # Add channel dimension
-            face_resized = np.expand_dims(face_resized, axis=0)   # Add batch dimension
-            face_resized = face_resized / 255.0                  # Normalize
+            face_resized = np.expand_dims(face_resized, axis=-1)
+            face_resized = np.expand_dims(face_resized, axis=0)
+            face_resized = face_resized / 255.0
 
-            # Make prediction
+            # Prediction
             prediction = model.predict(face_resized, verbose=0)
             emotion_index = np.argmax(prediction)
             emotion = CLASS_LABELS[emotion_index]
             confidence = np.max(prediction)
 
-            # Draw rectangle and label
-            # Use a dynamic color based on the emotion (optional, but adds flair)
-            color = (0, 255, 0) # Default Green
-            if emotion == 'Happy': color = (40, 200, 255) # Light Blue/Yellow
-            elif emotion == 'Angry': color = (0, 0, 255) # Red
-            elif emotion == 'Sad': color = (255, 0, 0) # Blue
-            elif emotion == 'Surprise': color = (0, 255, 255) # Yellow
+            # Define color based on emotion (Professional/Lively Palette)
+            color_map = {
+                'Happy': (40, 255, 100),   # Light Green/Yellow BGR
+                'Surprise': (0, 255, 255), # Yellow BGR
+                'Sad': (255, 100, 50),     # Light Blue BGR
+                'Angry': (0, 0, 255),      # Red BGR
+                'Neutral': (150, 150, 150),# Gray BGR
+                'Fear': (200, 50, 0),      # Dark Blue BGR
+                'Disgust': (50, 200, 50)   # Medium Green BGR
+            }
+            color = color_map.get(emotion, (255, 255, 255)) # Default White
 
-            cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
+            # Draw rectangle
+            cv2.rectangle(frame, (x, y), (x + w, y + h), color, 3) # Thicker border
+
+            # Draw label with background
             label = f"{emotion} ({confidence*100:.1f}%)"
-            
-            # Calculate text size for background box
             (text_w, text_h), baseline = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
             
-            # Draw a filled rectangle as a background for the text
+            # Draw a filled background box
             cv2.rectangle(frame, (x, y - text_h - baseline - 10), (x + text_w + 10, y), color, -1)
             
-            # Draw the text label
+            # Draw the text label in black for contrast
             cv2.putText(frame, label, (x + 5, y - baseline - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
             
-            # Optional: Display top 3 predictions in a sidebar/expander
-            top_indices = np.argsort(prediction[0])[-3:][::-1]
-            top_emotions = [(CLASS_LABELS[i], prediction[0][i]) for i in top_indices]
             
-            st.markdown(
-                f"""
-                <div style="border: 1px solid #dadce0; border-radius: 8px; padding: 10px; margin-top: 10px;">
-                    <h3 style="margin-top: 0; font-size: 1.25rem;">Face at ({x}, {y})</h3>
-                    <p style="text-align: left; margin-bottom: 5px;">
-                        <strong>Primary Emotion:</strong> <span class="emotion-{emotion}">{emotion} ({confidence*100:.1f}%)</span>
-                    </p>
-                    <details>
-                        <summary>Top 3 Probabilities</summary>
-                        <ul>
-                            {''.join([f'<li>{e}: {p*100:.1f}%</li>' for e, p in top_emotions])}
-                        </ul>
-                    </details>
-                </div>
-                """, unsafe_allow_html=True
-            )
+            # Display detailed result box
+            with results_container:
+                st.markdown(
+                    f"""
+                    <div class="emotion-result-box">
+                        <h3 style="margin-top: 0; color: #FF4B4B;">Face Analysis Report</h3>
+                        <p style="text-align: left; margin-bottom: 5px;">
+                            <strong>Primary Emotion Detected:</strong> <span class="emotion-{emotion}">{emotion}</span>
+                            (Confidence: {confidence*100:.1f}%)
+                        </p>
+                        <details>
+                            <summary style="color: #4CAF50; cursor: pointer;">Show Detailed Probabilities</summary>
+                            <ul>
+                                {''.join([f'<li><span class="emotion-{CLASS_LABELS[i]}">{CLASS_LABELS[i]}</span>: {prediction[0][i]*100:.1f}%</li>' 
+                                          for i in np.argsort(prediction[0])[-len(CLASS_LABELS):][::-1]])}
+                            </ul>
+                        </details>
+                    </div>
+                    """, unsafe_allow_html=True
+                )
 
 
         # 4. Display the Result
-        st.markdown("---")
-        st.subheader("🖼️ Processed Image Result")
+        st.subheader("Final Output Image")
         # Convert BGR (from OpenCV) back to RGB (for Streamlit display)
-        st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", use_container_width=True)
+        st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Facial Emotion Detection Output", use_container_width=True)
 
 else:
     # Initial state message
-    st.info("Please upload an image or take a picture to begin the emotion detection.")
+    st.info("The system is ready. Please use the controls above to upload or capture an image to begin the analysis.")
     
 # -------------------------
 # Footer / Credits
@@ -245,7 +286,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style='text-align: center; color: #9aa0a6; font-size: 0.85rem;'>
-        Powered by Keras, OpenCV, and Streamlit. Model: InsideOut by Ahsan Farabi.
+        This application is powered by Keras, OpenCV, and Streamlit. The underlying model is InsideOut.
     </div>
     """, unsafe_allow_html=True
 )
