@@ -62,26 +62,50 @@ st.markdown("""
         text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
     }
     
-    /* Specific styling for the overview text to be white and bigger */
+    /* Specific styling for the overview text (Dark box, white text) */
     .overview-text {
         font-size: 1.25rem; /* Bigger font size for overview text */
         color: #FFFFFF; /* White text */
         text-align: center;
         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Stronger shadow for visibility against dark blur */
-        background-color: rgba(0, 0, 0, 0.5); /* Slightly darker background for better white text visibility */
+        background-color: rgba(0, 0, 0, 0.5); /* Dark background */
         padding: 15px;
         border-radius: 0.75rem;
         margin-bottom: 1.5rem; /* Add some space below */
     }
 
-    /* Default paragraph styling (for other paragraphs) */
+    /* Custom styling for the initial state message (matching dark theme) */
+    .dark-info-box {
+        font-size: 1.15rem; 
+        color: #e8eaed; /* Light gray text */
+        text-align: center;
+        background-color: rgba(26, 35, 43, 0.85); /* Dark blue/gray background */
+        padding: 15px;
+        border-radius: 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Custom styling for the dark footer */
+    .footer-dark {
+        text-align: center; 
+        color: #bdc1c6; /* Slightly lighter gray text */
+        font-size: 0.85rem; 
+        background-color: rgba(26, 35, 43, 0.8); /* Dark background */
+        padding: 10px; 
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+        margin-top: 10px;
+    }
+
+    /* Default paragraph styling (for other paragraphs inside light container) */
     .stMarkdown p {
         font-size: 1.1rem;
         color: #212529; /* Even darker grey text for maximum readability */
         text-align: center;
     }
 
-    /* Info box styling */
+    /* Info box styling (kept for standard Streamlit messages like warnings/success) */
     div[data-testid="stAlert"] {
         border-radius: 0.5rem;
         border-left: 8px solid #fbbc05; /* Google Yellow */
@@ -302,8 +326,12 @@ if image_data is not None:
         st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", use_container_width=True)
 
 else:
-    # Initial state message
-    st.info("Please upload an image or take a picture to begin the emotion detection.")
+    # Initial state message - Replaced st.info with custom dark markdown box
+    st.markdown("""
+    <div class="dark-info-box">
+        <strong>Please upload an image or take a picture to begin the emotion detection.</strong>
+    </div>
+    """, unsafe_allow_html=True)
     
 # -------------------------
 # Footer / Credits
@@ -311,7 +339,7 @@ else:
 st.markdown("---")
 st.markdown(
     """
-    <div style='text-align: center; color: #7f878a; font-size: 0.85rem; background-color: rgba(255, 255, 255, 0.7); padding: 10px; border-radius: 0.5rem;'>
+    <div class='footer-dark'>
         Powered by Keras, OpenCV, and Streamlit. Model: InsideOut by Ahsan Farabi.
     </div>
     """, unsafe_allow_html=True
