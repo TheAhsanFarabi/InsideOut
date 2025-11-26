@@ -84,8 +84,7 @@ st.markdown("""
     /* NEW FIX: Ensure bold text (rendered as <strong> or <b>) is highly visible and bold inside the overview box. */
     .overview-text strong, .overview-text b {
         font-weight: 900 !important; /* Force black bold font weight */
-        color: #1a73e8 !important; /* Changed to Google Blue for high visibility */
-        text-shadow: 0 0 5px rgba(255, 255, 255, 0.8); /* Increased glow and shadow */
+        color: #FFFFFF !important; /* Changed to White for high visibility */
     }
 
     /* Custom styling for the initial state message (matching dark theme) */
