@@ -10,7 +10,7 @@ import requests
 # Project Title & Overview
 # -------------------------
 st.set_page_config(page_title="InsideOut: Real-Time Emotion Detection", layout="centered")
-st.title("🎭 InsideOut: An Emotion Recognition System")
+st.title("InsideOut: An Emotion Recognition System")
 st.markdown("""
 Welcome to **InsideOut**, a real-time emotion recognition system.  
 Upload an image or take a live photo, and let the AI detect facial emotions instantly!  
@@ -43,7 +43,7 @@ model, face_cascade = download_and_load_model()
 # -------------------------
 # Input Options
 # -------------------------
-uploaded_file = st.file_uploader("📤 Upload an image", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 camera_input = st.camera_input("📷 Or take a picture")
 
 image_data = uploaded_file if uploaded_file else camera_input
@@ -75,6 +75,6 @@ if image_data is not None:
         cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
 
     # Display the result
-    st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="🧠 Emotion Detection Result", use_container_width=True)
+    st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", use_container_width=True)
 else:
-    st.info("👆 Please upload an image or take a picture to begin.")
+    st.info("Please upload an image or take a picture to begin.")
