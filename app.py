@@ -17,9 +17,9 @@ st.set_page_config(
 # Custom CSS for a modern look with a blurry background effect
 st.markdown("""
 <style>
-    /* Blurred background effect */
+    /* Blurred background effect - Using a placeholder URL */
     .stApp {
-        background: url("https://images.unsplash.com/photo-1518066000714-cdcd825c673e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); /* Replace with your desired image URL */
+        background: url("https://images.unsplash.com/photo-1585507252242-11fe632c26e8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
         background-size: cover;
         background-attachment: fixed;
         background-position: center;
@@ -34,11 +34,11 @@ st.markdown("""
         right: 0;
         bottom: 0;
         background: inherit;
-        filter: blur(8px); /* Adjust blur strength as needed */
-        z-index: -1; /* Ensure it's behind content */
+        filter: blur(8px); /* Blur strength */
+        z-index: -1; 
     }
 
-    /* Main Streamlit container styling */
+    /* Main Streamlit container styling - Semi-transparent white content block */
     .main .block-container {
         background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white background for content */
         border-radius: 1rem;
@@ -173,9 +173,11 @@ if model is None or face_cascade is None:
 col1, col2 = st.columns(2)
 
 with col1:
+    # Removed emoji from label
     uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "jpeg", "png"])
 
 with col2:
+    # Removed emoji from label
     camera_input = st.camera_input("Take a Live Picture")
 
 # Determine the source of the image data
@@ -203,7 +205,7 @@ if image_data is not None:
     # 2. Face Detection
     faces = face_cascade.detectMultiScale(
         gray,
-        scaleFactor=1.1,  # Reduced for slightly better detection
+        scaleFactor=1.1,  
         minNeighbors=5,
         minSize=(30, 30)
     )
@@ -211,8 +213,10 @@ if image_data is not None:
     detected_faces_count = len(faces)
     
     if detected_faces_count == 0:
+        # Removed emoji from warning
         st.warning("No faces detected in the image. Please try another one.")
     else:
+        # Removed emoji from success
         st.success(f"Detected {detected_faces_count} face(s). Processing emotions...")
         
         # 3. Emotion Prediction and Drawing
@@ -222,9 +226,9 @@ if image_data is not None:
             
             # Preprocessing for the Keras model
             face_resized = cv2.resize(face_roi, (48, 48))
-            face_resized = np.expand_dims(face_resized, axis=-1)  # Add channel dimension
-            face_resized = np.expand_dims(face_resized, axis=0)   # Add batch dimension
-            face_resized = face_resized / 255.0                  # Normalize
+            face_resized = np.expand_dims(face_resized, axis=-1)  
+            face_resized = np.expand_dims(face_resized, axis=0)   
+            face_resized = face_resized / 255.0                  
 
             # Make prediction
             prediction = model.predict(face_resized, verbose=0)
@@ -235,13 +239,13 @@ if image_data is not None:
             # Draw rectangle and label
             # Use a dynamic color based on the emotion
             color_map = {
-                'Happy': (40, 200, 255), # Light Blue/Yellow BGR
-                'Angry': (0, 0, 255),    # Red BGR
-                'Sad': (255, 0, 0),      # Blue BGR
-                'Surprise': (0, 255, 255), # Yellow BGR
+                'Happy': (40, 200, 255),    # Light Blue/Yellow BGR
+                'Angry': (0, 0, 255),       # Red BGR
+                'Sad': (255, 0, 0),         # Blue BGR
+                'Surprise': (0, 255, 255),  # Yellow BGR
                 'Neutral': (128, 128, 128), # Gray BGR
-                'Fear': (0, 69, 255),    # Orange BGR (to avoid clashing with Sad)
-                'Disgust': (0, 255, 0)   # Green BGR
+                'Fear': (0, 69, 255),       # Orange BGR 
+                'Disgust': (0, 255, 0)      # Green BGR
             }
             color = color_map.get(emotion, (0, 255, 0)) # Default Green
 
@@ -257,8 +261,8 @@ if image_data is not None:
             # Draw the text label
             cv2.putText(frame, label, (x + 5, y - baseline - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
             
-            # Display detailed prediction for each face
-            top_indices = np.argsort(prediction[0])[-3:][::-1]
+            # Optional: Display top 3 predictions in a sidebar/expander
+            top_indices = np.argsort(prediction[0])[-len(CLASS_LABELS):][::-1]
             top_emotions = [(CLASS_LABELS[i], prediction[0][i]) for i in top_indices]
             
             st.markdown(
@@ -271,7 +275,7 @@ if image_data is not None:
                     <details>
                         <summary style="color: #5f6368;">Top 3 Probabilities</summary>
                         <ul style="color: #3c4043;">
-                            {''.join([f'<li><span class="emotion-{e[0]}">{e[0]}</span>: {e[1]*100:.1f}%</li>' for e in top_emotions])}
+                            {''.join([f'<li><span class="emotion-{e[0]}">{e[0]}</span>: {e[1]*100:.1f}%</li>' for e in top_emotions[:3]])}
                         </ul>
                     </details>
                 </div>
@@ -281,7 +285,8 @@ if image_data is not None:
 
         # 4. Display the Result
         st.markdown("---")
-        st.subheader("Processed Image Result")
+        # Removed emoji from subheader
+        st.subheader("Processed Image Result") 
         # Convert BGR (from OpenCV) back to RGB (for Streamlit display)
         st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", use_container_width=True)
 
