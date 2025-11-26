@@ -19,7 +19,7 @@ st.markdown("""
 <style>
     /* Blurred background effect */
     .stApp {
-        background: url("https://images.unsplash.com/photo-1585507252242-11fe632c26e8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        background: url("https://images.unsplash.com/photo-1759735541612-18736db330e9?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
         background-size: cover;
         background-attachment: fixed;
         background-position: center;
@@ -34,45 +34,34 @@ st.markdown("""
         right: 0;
         bottom: 0;
         background: inherit;
+        /* INCREASED BLUR and DARKENING to make the change visible */
         filter: blur(35px) brightness(20%); 
-        z-index: -1; 
+        z-index: -1; /* Ensures it sits behind the Streamlit content */
     }
 
     /* Main Streamlit container styling - Semi-transparent white content block */
     .main .block-container {
+        /* Increased opacity slightly for better contrast against dark background */
         background-color: rgba(255, 255, 255, 0.95); 
         border-radius: 1rem;
         padding-top: 2rem;
         padding-bottom: 2rem;
         padding-left: 1.5rem;
         padding-right: 1.5rem;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); 
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* Stronger shadow for more pop */
         margin-top: 2rem;
         margin-bottom: 2rem;
     }
 
     /* Title and Header styling */
     h1 {
-        font-size: 3.5rem; /* Increased title font size */
+        font-size: 3rem;
         color: #1a73e8; /* Google Blue */
         text-align: center;
         margin-bottom: 0.5rem;
         text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
     }
     
-    /* Specific styling for the overview text to be white and bigger */
-    .overview-text {
-        font-size: 1.25rem; /* Bigger font size for overview text */
-        color: #FFFFFF; /* White text */
-        text-align: center;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6); /* Added text shadow for visibility against dark blur */
-        background-color: rgba(0, 0, 0, 0.4); /* Slightly dark background for white text */
-        padding: 10px;
-        border-radius: 0.5rem;
-        margin-bottom: 1.5rem; /* Add some space below */
-    }
-
-    /* Default paragraph styling (for other paragraphs) */
     .stMarkdown p {
         font-size: 1.1rem;
         color: #212529; /* Even darker grey text for maximum readability */
@@ -83,7 +72,7 @@ st.markdown("""
     div[data-testid="stAlert"] {
         border-radius: 0.5rem;
         border-left: 8px solid #fbbc05; /* Google Yellow */
-        background-color: rgba(255, 250, 220, 0.98); 
+        background-color: rgba(255, 250, 220, 0.98); /* Near opaque background */
     }
 
     /* File uploader and camera input container */
@@ -92,7 +81,7 @@ st.markdown("""
         border-radius: 0.75rem;
         padding: 1.5rem;
         text-align: center;
-        background-color: rgba(248, 249, 250, 0.98); 
+        background-color: rgba(248, 249, 250, 0.98); /* Near opaque light background */
         transition: all 0.3s ease;
     }
 
@@ -104,7 +93,7 @@ st.markdown("""
     /* Result image border */
     div.stImage img {
         border-radius: 1rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35); 
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35); /* Stronger shadow */
     }
     
     /* Emotion label color coding */
@@ -118,7 +107,7 @@ st.markdown("""
 
     /* Custom detailed result box styling */
     div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) { 
-        background-color: rgba(241, 243, 244, 0.98); 
+        background-color: rgba(241, 243, 244, 0.98); /* Near opaque light gray background */
         border: 1px solid #e8eaed;
         border-radius: 0.75rem;
         padding: 15px;
@@ -134,12 +123,10 @@ st.markdown("""
 # -------------------------
 st.title("InsideOut: An Emotion Recognition System")
 st.markdown("""
-<div class="overview-text">
 Welcome to **InsideOut**, a real-time emotion recognition system.
 Upload an image or take a live photo, and let the AI detect facial emotions instantly!
 Supported emotions: **Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.**
-</div>
-""", unsafe_allow_html=True)
+""")
 
 # --- Separator ---
 st.markdown("---")
@@ -172,7 +159,7 @@ def download_and_load_model():
                 
     model = load_model(str(MODEL_LOCAL_PATH))
     # Load OpenCV's default frontal face detection cascade
-    face_cascade = cv2.CascadeClassifier(cv2.data.haascades + "haarcascade_frontalface_default.xml")
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
     return model, face_cascade
 
 # Load resources
