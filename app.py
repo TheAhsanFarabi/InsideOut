@@ -61,7 +61,7 @@ st.markdown("""
     /* Title and Header styling - ADDED !important for enforcement */
     h1 {
         /* UPDATED: Aggressively reduced font size to 2.5rem to ensure the long title fits on one line universally. */
-        font-size: 4rem !important; 
+        font-size: 2.5rem !important; 
         font-family: 'Poppins', sans-serif !important; 
         color: #1a73e8; /* Google Blue */
         text-align: center;
@@ -79,6 +79,12 @@ st.markdown("""
         padding: 15px;
         border-radius: 0.75rem;
         margin-bottom: 1.5rem; 
+    }
+    
+    /* FIX: Ensure bold text (which is rendered as <strong> in HTML by Streamlit) is visible inside the overview box. */
+    .overview-text strong {
+        font-weight: 700 !important; /* Force a bold font weight */
+        color: #fbbc05; /* Use a highlight color (Google Yellow) for better contrast and emphasis */
     }
 
     /* Custom styling for the initial state message (matching dark theme) */
