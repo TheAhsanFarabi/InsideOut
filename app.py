@@ -19,7 +19,7 @@ st.markdown("""
 <style>
     /* Blurred background effect */
     .stApp {
-        background: url("https://images.unsplash.com/photo-1567977180669-042202481f37?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        background: url("https://images.unsplash.com/photo-1759735541612-18736db330e9?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
         background-size: cover;
         background-attachment: fixed;
         background-position: center;
