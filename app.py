@@ -81,10 +81,11 @@ st.markdown("""
         margin-bottom: 1.5rem; 
     }
     
-    /* FIX: Ensure bold text (which is rendered as <strong> in HTML by Streamlit) is visible inside the overview box. */
+    /* NEW FIX: Ensure bold text (rendered as <strong>) is highly visible and bold inside the overview box. */
     .overview-text strong {
-        font-weight: 700 !important; /* Force a bold font weight */
-        color: #fbbc05; /* Use a highlight color (Google Yellow) for better contrast and emphasis */
+        font-weight: 900 !important; /* Force black bold font weight */
+        color: #1a73e8 !important; /* Changed to Google Blue for high visibility */
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.5); /* Add a subtle glow */
     }
 
     /* Custom styling for the initial state message (matching dark theme) */
