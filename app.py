@@ -25,7 +25,7 @@ st.markdown("""
         background-position: center;
     }
 
-    /* Apply blur effect to the background, and darken it */
+    /* Apply EXTREME blur effect and darkening for visibility */
     .stApp::before {
         content: '';
         position: absolute;
@@ -34,19 +34,21 @@ st.markdown("""
         right: 0;
         bottom: 0;
         background: inherit;
-        filter: blur(25px) brightness(30%); /* Increased blur strength, added darkening */
-        z-index: -1; 
+        /* INCREASED BLUR and DARKENING to make the change visible */
+        filter: blur(35px) brightness(20%); 
+        z-index: -1; /* Ensures it sits behind the Streamlit content */
     }
 
     /* Main Streamlit container styling - Semi-transparent white content block */
     .main .block-container {
-        background-color: rgba(255, 255, 255, 0.92); /* Slightly less transparent white for better contrast */
+        /* Increased opacity slightly for better contrast against dark background */
+        background-color: rgba(255, 255, 255, 0.95); 
         border-radius: 1rem;
         padding-top: 2rem;
         padding-bottom: 2rem;
         padding-left: 1.5rem;
         padding-right: 1.5rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Stronger shadow for more pop */
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* Stronger shadow for more pop */
         margin-top: 2rem;
         margin-bottom: 2rem;
     }
@@ -57,7 +59,7 @@ st.markdown("""
         color: #1a73e8; /* Google Blue */
         text-align: center;
         margin-bottom: 0.5rem;
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Slightly stronger text shadow */
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
     }
     
     .stMarkdown p {
@@ -70,7 +72,7 @@ st.markdown("""
     div[data-testid="stAlert"] {
         border-radius: 0.5rem;
         border-left: 8px solid #fbbc05; /* Google Yellow */
-        background-color: rgba(255, 250, 220, 0.95); /* Less transparent background */
+        background-color: rgba(255, 250, 220, 0.98); /* Near opaque background */
     }
 
     /* File uploader and camera input container */
@@ -79,19 +81,19 @@ st.markdown("""
         border-radius: 0.75rem;
         padding: 1.5rem;
         text-align: center;
-        background-color: rgba(248, 249, 250, 0.95); /* Less transparent light background */
+        background-color: rgba(248, 249, 250, 0.98); /* Near opaque light background */
         transition: all 0.3s ease;
     }
 
     div[data-testid="stFileUploader"] > div:first-child:hover, div[data-testid="stCameraInput"] > div:first-child:hover {
-        background-color: rgba(241, 243, 244, 1); /* Fully opaque on hover */
+        background-color: rgba(241, 243, 244, 1); 
         border-color: #1a73e8; 
     }
 
     /* Result image border */
     div.stImage img {
         border-radius: 1rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* Stronger shadow */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35); /* Stronger shadow */
     }
     
     /* Emotion label color coding */
@@ -105,12 +107,12 @@ st.markdown("""
 
     /* Custom detailed result box styling */
     div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) { 
-        background-color: rgba(241, 243, 244, 0.95); /* Less transparent light gray background */
+        background-color: rgba(241, 243, 244, 0.98); /* Near opaque light gray background */
         border: 1px solid #e8eaed;
         border-radius: 0.75rem;
         padding: 15px;
         margin-top: 15px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
     }
     
 </style>
