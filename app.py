@@ -17,7 +17,7 @@ st.set_page_config(
 # Custom CSS for a modern look with a blurry background effect
 st.markdown("""
 <style>
-    /* Blurred background effect - Using a placeholder URL */
+    /* Blurred background effect */
     .stApp {
         background: url("https://images.unsplash.com/photo-1585507252242-11fe632c26e8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
         background-size: cover;
@@ -34,7 +34,7 @@ st.markdown("""
         right: 0;
         bottom: 0;
         background: inherit;
-        filter: blur(15px) brightness(60%); /* Increased blur strength, added darkening */
+        filter: blur(25px) brightness(30%); /* Increased blur strength, added darkening */
         z-index: -1; 
     }
 
