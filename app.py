@@ -61,7 +61,7 @@ st.markdown("""
     /* Title and Header styling - ADDED !important for enforcement */
     h1 {
         /* UPDATED: Aggressively reduced font size to 2.5rem to ensure the long title fits on one line universally. */
-        font-size: 2.5rem !important; 
+        font-size: 4rem !important; 
         font-family: 'Poppins', sans-serif !important; 
         color: #1a73e8; /* Google Blue */
         text-align: center;
