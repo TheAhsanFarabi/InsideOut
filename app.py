@@ -6,31 +6,88 @@ from PIL import Image
 import os
 import requests
 
-# -------------------------
-# Project Title & Overview
-# -------------------------
-st.set_page_config(page_title="InsideOut: Real-Time Emotion Detection", layout="centered")
-st.title("InsideOut: An Emotion Recognition System")
+# ---------------------------------------------------
+# Modern UI Styling (CSS)
+# ---------------------------------------------------
+st.set_page_config(page_title="InsideOut: Real-Time Emotion Detection", layout="wide")
+
 st.markdown("""
-Welcome to **InsideOut**, a real-time emotion recognition system.  
-Upload an image or take a live photo, and let the AI detect facial emotions instantly!  
-Supported emotions: Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.
-""")
+<style>
+
+    /* Page background */
+    .stApp {
+        background: linear-gradient(135deg, #2b5876, #4e4376);
+        color: #ffffff;
+    }
+
+    /* Title styling */
+    .title-container {
+        text-align: center;
+        padding: 10px 0 30px 0;
+    }
+    .title-container h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+    /* Description box */
+    .description-box {
+        background: rgba(255, 255, 255, 0.12);
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 35px;
+        font-size: 1.1rem;
+    }
+
+    /* Uploader section */
+    .upload-section {
+        background: rgba(255, 255, 255, 0.10);
+        padding: 25px;
+        border-radius: 12px;
+        backdrop-filter: blur(6px);
+    }
+
+    /* Result Styling */
+    .result-container {
+        margin-top: 25px;
+    }
+
+</style>
+""", unsafe_allow_html=True)
 
 # -------------------------
-# Constants & Configuration
+# Page Title
+# -------------------------
+st.markdown('<div class="title-container"><h1>InsideOut: Emotion Recognition</h1></div>', unsafe_allow_html=True)
+
+# -------------------------
+# Description
+# -------------------------
+st.markdown("""
+<div class="description-box">
+Welcome to <strong>InsideOut</strong> — a real-time emotion recognition system.<br>
+Upload an image or take a live picture, and let the AI detect facial emotions instantly.<br>
+Supported emotions: Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.
+</div>
+""", unsafe_allow_html=True)
+
+# -------------------------
+# Constants
 # -------------------------
 MODEL_URL = "https://huggingface.co/AhsanFarabi/inside_out/resolve/main/inside_out.h5"
 MODEL_LOCAL_PATH = "inside_out.h5"
 CLASS_LABELS = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
 
+
 # -------------------------
-# Load Model & Cascade
+# Load Model
 # -------------------------
 @st.cache_resource
 def download_and_load_model():
     if not os.path.exists(MODEL_LOCAL_PATH):
-        with st.spinner("⏳ Downloading model..."):
+        with st.spinner("Downloading model..."):
             response = requests.get(MODEL_URL)
             with open(MODEL_LOCAL_PATH, "wb") as f:
                 f.write(response.content)
@@ -41,15 +98,26 @@ def download_and_load_model():
 model, face_cascade = download_and_load_model()
 
 # -------------------------
-# Input Options
+# Input Area
 # -------------------------
-uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-camera_input = st.camera_input("📷 Or take a picture")
+st.subheader("Upload or Capture Image")
+
+col1, col2 = st.columns([1,1])
+
+with col1:
+    st.markdown('<div class="upload-section">', unsafe_allow_html=True)
+    uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "jpeg", "png"])
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with col2:
+    st.markdown('<div class="upload-section">', unsafe_allow_html=True)
+    camera_input = st.camera_input("Or take a picture")
+    st.markdown('</div>', unsafe_allow_html=True)
 
 image_data = uploaded_file if uploaded_file else camera_input
 
 # -------------------------
-# Processing Image
+# Image Processing
 # -------------------------
 if image_data is not None:
     image = Image.open(image_data).convert("RGB")
@@ -70,11 +138,14 @@ if image_data is not None:
         emotion = CLASS_LABELS[np.argmax(prediction)]
         confidence = np.max(prediction)
 
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (64, 255, 128), 2)
         label = f"{emotion} ({confidence*100:.1f}%)"
-        cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
+        cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 
+                    0.8, (255, 255, 0), 2)
 
-    # Display the result
+    st.markdown('<div class="result-container">', unsafe_allow_html=True)
     st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
 else:
     st.info("Please upload an image or take a picture to begin.")
