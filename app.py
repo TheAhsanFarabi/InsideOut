@@ -58,10 +58,34 @@ st.markdown("""
         margin-bottom: 2rem;
     }
 
-    /* Title and Header styling - ADDED !important for enforcement */
+    /* NEW: Custom header container for aligning logo and main title */
+    .custom-header {
+        position: relative; /* Allows logo to be absolutely positioned relative to this container */
+        display: flex;
+        justify-content: center; /* Centers the H1 */
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    /* NEW: Styling for the small top-left logo text */
+    .logo-text {
+        position: absolute;
+        left: 0; /* Positions it to the left */
+        font-size: 2rem; 
+        font-family: 'Poppins', sans-serif !important; 
+        color: #fbbc05; /* Google Yellow for high contrast icon feel */
+        font-weight: 900 !important;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+        /* Ensure it's responsive on small screens */
+        top: 0; 
+        left: 10px; /* Slight margin from the edge */
+    }
+
+
+    /* Title styling (This is now for the main 'An Emotion Recognition System' text) */
     h1 {
-        /* UPDATED: Aggressively reduced font size to 2.5rem to ensure the long title fits on one line universally. */
-        font-size: 4rem !important; 
+        /* Adjusted size to fit well as the main title below the logo */
+        font-size: 3rem !important; 
         font-family: 'Poppins', sans-serif !important; 
         color: #1a73e8; /* Google Blue */
         text-align: center;
@@ -81,7 +105,7 @@ st.markdown("""
         margin-bottom: 1.5rem; 
     }
     
-    /* NEW FIX: Ensure bold text (rendered as <strong> or <b>) is highly visible and bold inside the overview box. */
+    /* FIX: Ensure bold text (rendered as <strong> or <b>) is highly visible and bold inside the overview box. */
     .overview-text strong, .overview-text b {
         font-weight: 900 !important; /* Force black bold font weight */
         color: #1a73e8 !important; /* Changed to Google Blue for high visibility */
@@ -194,12 +218,15 @@ st.markdown("""
 # -------------------------
 # Project Title & Overview
 # -------------------------
-st.title("InsideOut: An Emotion Recognition System")
 st.markdown("""
+<div class="custom-header">
+    <div class="logo-text">InsideOut</div>
+    <h1>An Emotion Recognition System</h1>
+</div>
 <div class="overview-text">
-Welcome to InsideOut, a real-time emotion recognition system.
+Welcome to **InsideOut**, a real-time emotion recognition system.
 Upload an image or take a live photo, and let the AI detect facial emotions instantly!
-Supported emotions: Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.
+Supported emotions: **Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.**
 </div>
 """, unsafe_allow_html=True)
 
