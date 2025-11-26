@@ -58,7 +58,7 @@ st.markdown("""
 
     /* Title and Header styling - ADDED !important for enforcement */
     h1 {
-        font-size: 5.0rem !important; /* ENFORCED: Significantly increased title font size for impact */
+        font-size: 4.5rem !important; /* ENFORCED: Significantly increased title font size for impact */
         font-family: 'Poppins', sans-serif !important; /* ENFORCED: Aesthetic unique font */
         color: #1a73e8; /* Google Blue */
         text-align: center;
