@@ -81,11 +81,11 @@ st.markdown("""
         margin-bottom: 1.5rem; 
     }
     
-    /* NEW FIX: Ensure bold text (rendered as <strong>) is highly visible and bold inside the overview box. */
-    .overview-text strong {
+    /* NEW FIX: Ensure bold text (rendered as <strong> or <b>) is highly visible and bold inside the overview box. */
+    .overview-text strong, .overview-text b {
         font-weight: 900 !important; /* Force black bold font weight */
         color: #1a73e8 !important; /* Changed to Google Blue for high visibility */
-        text-shadow: 0 0 3px rgba(255, 255, 255, 0.5); /* Add a subtle glow */
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.8); /* Increased glow and shadow */
     }
 
     /* Custom styling for the initial state message (matching dark theme) */
