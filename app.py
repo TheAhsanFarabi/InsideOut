@@ -55,13 +55,26 @@ st.markdown("""
 
     /* Title and Header styling */
     h1 {
-        font-size: 3rem;
+        font-size: 3.5rem; /* Increased title font size */
         color: #1a73e8; /* Google Blue */
         text-align: center;
         margin-bottom: 0.5rem;
         text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
     }
     
+    /* Specific styling for the overview text to be white and bigger */
+    .overview-text {
+        font-size: 1.25rem; /* Bigger font size for overview text */
+        color: #FFFFFF; /* White text */
+        text-align: center;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Stronger shadow for visibility against dark blur */
+        background-color: rgba(0, 0, 0, 0.5); /* Slightly darker background for better white text visibility */
+        padding: 15px;
+        border-radius: 0.75rem;
+        margin-bottom: 1.5rem; /* Add some space below */
+    }
+
+    /* Default paragraph styling (for other paragraphs) */
     .stMarkdown p {
         font-size: 1.1rem;
         color: #212529; /* Even darker grey text for maximum readability */
@@ -123,10 +136,12 @@ st.markdown("""
 # -------------------------
 st.title("InsideOut: An Emotion Recognition System")
 st.markdown("""
+<div class="overview-text">
 Welcome to **InsideOut**, a real-time emotion recognition system.
 Upload an image or take a live photo, and let the AI detect facial emotions instantly!
 Supported emotions: **Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.**
-""")
+</div>
+""", unsafe_allow_html=True)
 
 # --- Separator ---
 st.markdown("---")
