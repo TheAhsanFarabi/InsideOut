@@ -44,48 +44,49 @@ st.markdown("""
 
     /* Main Streamlit container styling - Changed to dark, semi-transparent block */
     .main .block-container {
-        /* FIX: INCREASED WIDTH and PADDING to make the center content less cramped */
-        max-width: 1200px !important; /* Enforce a much wider maximum width */
+        /* UPDATED: Increased max-width again to 1400px for title and content spacing */
+        max-width: 1400px !important; 
         
         background-color: rgba(50, 50, 50, 0.95); 
         border-radius: 1rem;
         padding-top: 2rem;
         padding-bottom: 2rem;
-        padding-left: 3rem;   /* Increased padding */
-        padding-right: 3rem;  /* Increased padding */
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8); /* Stronger shadow for more pop */
+        padding-left: 3rem;   
+        padding-right: 3rem;  
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8); 
         margin-top: 2rem;
         margin-bottom: 2rem;
     }
 
     /* Title and Header styling - ADDED !important for enforcement */
     h1 {
-        font-size: 5.5rem !important; /* ENFORCED: Significantly increased title font size for impact */
-        font-family: 'Poppins', sans-serif !important; /* ENFORCED: Aesthetic unique font */
+        /* UPDATED: Reduced font size from 5.5rem to 4.5rem to ensure the title fits on one line */
+        font-size: 4.5rem !important; 
+        font-family: 'Poppins', sans-serif !important; 
         color: #1a73e8; /* Google Blue */
         text-align: center;
         margin-bottom: 0.5rem;
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4); /* Stronger text shadow for clarity */
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4); 
     }
     
     /* Specific styling for the overview text (Dark box, white text) */
     .overview-text {
-        font-size: 1.25rem; /* Bigger font size for overview text */
-        color: #FFFFFF; /* White text */
+        font-size: 1.25rem; 
+        color: #FFFFFF; 
         text-align: center;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Stronger shadow for visibility against dark blur */
-        background-color: rgba(0, 0, 0, 0.5); /* Dark background */
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); 
+        background-color: rgba(0, 0, 0, 0.5); 
         padding: 15px;
         border-radius: 0.75rem;
-        margin-bottom: 1.5rem; /* Add some space below */
+        margin-bottom: 1.5rem; 
     }
 
     /* Custom styling for the initial state message (matching dark theme) */
     .dark-info-box {
         font-size: 1.15rem; 
-        color: #e8eaed; /* Light gray text */
+        color: #e8eaed; 
         text-align: center;
-        background-color: rgba(26, 35, 43, 0.85); /* Dark blue/gray background */
+        background-color: rgba(26, 35, 43, 0.85); 
         padding: 15px;
         border-radius: 0.75rem;
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -95,9 +96,9 @@ st.markdown("""
     /* Custom styling for the dark footer */
     .footer-dark {
         text-align: center; 
-        color: #bdc1c6; /* Slightly lighter gray text */
+        color: #bdc1c6; 
         font-size: 0.85rem; 
-        background-color: rgba(26, 35, 43, 0.8); /* Dark background */
+        background-color: rgba(26, 35, 43, 0.8); 
         padding: 10px; 
         border-radius: 0.5rem;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
@@ -107,7 +108,7 @@ st.markdown("""
     /* Default paragraph styling - CHANGED to white/light gray for readability inside dark container */
     .stMarkdown p, .stMarkdown, .stSubheader {
         font-size: 1.1rem;
-        color: #f8f8f8; /* Light text for visibility against dark container background */
+        color: #f8f8f8; 
         text-align: center;
     }
 
@@ -115,7 +116,7 @@ st.markdown("""
     div[data-testid="stAlert"] {
         border-radius: 0.5rem;
         border-left: 8px solid #fbbc05; /* Google Yellow */
-        background-color: rgba(255, 250, 220, 0.98); /* Near opaque background */
+        background-color: rgba(255, 250, 220, 0.98); 
     }
 
     /* File uploader and camera input container - CHANGED to dark theme */
@@ -126,7 +127,7 @@ st.markdown("""
         text-align: center;
         /* CHANGED: Dark background for input containers */
         background-color: rgba(70, 70, 70, 0.98); 
-        color: #e8eaed; /* Light text inside input containers */
+        color: #e8eaed; 
         transition: all 0.3s ease;
     }
     
@@ -144,14 +145,14 @@ st.markdown("""
     /* Result image border */
     div.stImage img {
         border-radius: 1rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35); /* Stronger shadow */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35); 
     }
     
     /* Emotion label color coding */
     .emotion-Angry { color: #dc3545; font-weight: bold; }
     .emotion-Happy { color: #28a745; font-weight: bold; }
     .emotion-Surprise { color: #ffc107; font-weight: bold; }
-    .emotion-Neutral { color: #aaaaaa; font-weight: bold; } /* Slightly brighter neutral for dark background */
+    .emotion-Neutral { color: #aaaaaa; font-weight: bold; } 
     .emotion-Sad { color: #007bff; font-weight: bold; }
     .emotion-Fear { color: #6f42c1; font-weight: bold; }
     .emotion-Disgust { color: #20c997; font-weight: bold; }
@@ -172,7 +173,7 @@ st.markdown("""
     div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) ul,
     div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) li,
     div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) summary {
-        color: #f8f8f8 !important; /* Enforce light text */
+        color: #f8f8f8 !important; 
     }
     
     /* Header color inside the result detail box */
