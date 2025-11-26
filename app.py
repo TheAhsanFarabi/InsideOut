@@ -19,13 +19,13 @@ st.markdown("""
 <style>
     /* Blurred background effect - Using a placeholder URL */
     .stApp {
-        background: url("https://images.unsplash.com/photo-1585507252242-11fe632c26e8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        background: url("https://images.unsplash.com/photo-1518066000714-cdcd825c673e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
         background-size: cover;
         background-attachment: fixed;
         background-position: center;
     }
 
-    /* Apply blur effect to the background, not the content */
+    /* Apply blur effect to the background, and darken it */
     .stApp::before {
         content: '';
         position: absolute;
@@ -34,19 +34,19 @@ st.markdown("""
         right: 0;
         bottom: 0;
         background: inherit;
-        filter: blur(8px); /* Blur strength */
+        filter: blur(15px) brightness(60%); /* Increased blur strength, added darkening */
         z-index: -1; 
     }
 
     /* Main Streamlit container styling - Semi-transparent white content block */
     .main .block-container {
-        background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white background for content */
+        background-color: rgba(255, 255, 255, 0.92); /* Slightly less transparent white for better contrast */
         border-radius: 1rem;
         padding-top: 2rem;
         padding-bottom: 2rem;
         padding-left: 1.5rem;
         padding-right: 1.5rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Stronger shadow for more pop */
         margin-top: 2rem;
         margin-bottom: 2rem;
     }
@@ -57,12 +57,12 @@ st.markdown("""
         color: #1a73e8; /* Google Blue */
         text-align: center;
         margin-bottom: 0.5rem;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Slightly stronger text shadow */
     }
     
     .stMarkdown p {
         font-size: 1.1rem;
-        color: #3c4043; /* Darker grey text for readability */
+        color: #212529; /* Even darker grey text for maximum readability */
         text-align: center;
     }
 
@@ -70,28 +70,28 @@ st.markdown("""
     div[data-testid="stAlert"] {
         border-radius: 0.5rem;
         border-left: 8px solid #fbbc05; /* Google Yellow */
-        background-color: rgba(255, 250, 220, 0.9); /* Lighter, semi-transparent background */
+        background-color: rgba(255, 250, 220, 0.95); /* Less transparent background */
     }
 
     /* File uploader and camera input container */
     div[data-testid="stFileUploader"] > div:first-child, div[data-testid="stCameraInput"] > div:first-child {
-        border: 2px dashed #aab0b6; /* Softer dashed border */
+        border: 2px dashed #aab0b6; 
         border-radius: 0.75rem;
         padding: 1.5rem;
         text-align: center;
-        background-color: rgba(248, 249, 250, 0.9); /* Semi-transparent light background */
+        background-color: rgba(248, 249, 250, 0.95); /* Less transparent light background */
         transition: all 0.3s ease;
     }
 
     div[data-testid="stFileUploader"] > div:first-child:hover, div[data-testid="stCameraInput"] > div:first-child:hover {
-        background-color: rgba(241, 243, 244, 0.95);
-        border-color: #1a73e8; /* Blue on hover */
+        background-color: rgba(241, 243, 244, 1); /* Fully opaque on hover */
+        border-color: #1a73e8; 
     }
 
     /* Result image border */
     div.stImage img {
         border-radius: 1rem;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* Stronger shadow */
     }
     
     /* Emotion label color coding */
@@ -104,13 +104,13 @@ st.markdown("""
     .emotion-Disgust { color: #20c997; font-weight: bold; }
 
     /* Custom detailed result box styling */
-    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) { /* Target the parent of h3 "Face at (x,y)" */
-        background-color: rgba(241, 243, 244, 0.9); /* Light gray, semi-transparent background */
+    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) { 
+        background-color: rgba(241, 243, 244, 0.95); /* Less transparent light gray background */
         border: 1px solid #e8eaed;
         border-radius: 0.75rem;
         padding: 15px;
         margin-top: 15px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); /* Stronger shadow */
     }
     
 </style>
@@ -173,11 +173,9 @@ if model is None or face_cascade is None:
 col1, col2 = st.columns(2)
 
 with col1:
-    # Removed emoji from label
     uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "jpeg", "png"])
 
 with col2:
-    # Removed emoji from label
     camera_input = st.camera_input("Take a Live Picture")
 
 # Determine the source of the image data
@@ -213,10 +211,8 @@ if image_data is not None:
     detected_faces_count = len(faces)
     
     if detected_faces_count == 0:
-        # Removed emoji from warning
         st.warning("No faces detected in the image. Please try another one.")
     else:
-        # Removed emoji from success
         st.success(f"Detected {detected_faces_count} face(s). Processing emotions...")
         
         # 3. Emotion Prediction and Drawing
@@ -261,7 +257,7 @@ if image_data is not None:
             # Draw the text label
             cv2.putText(frame, label, (x + 5, y - baseline - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
             
-            # Optional: Display top 3 predictions in a sidebar/expander
+            # Optional: Display top predictions for each face
             top_indices = np.argsort(prediction[0])[-len(CLASS_LABELS):][::-1]
             top_emotions = [(CLASS_LABELS[i], prediction[0][i]) for i in top_indices]
             
@@ -285,9 +281,7 @@ if image_data is not None:
 
         # 4. Display the Result
         st.markdown("---")
-        # Removed emoji from subheader
         st.subheader("Processed Image Result") 
-        # Convert BGR (from OpenCV) back to RGB (for Streamlit display)
         st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", use_container_width=True)
 
 else:
