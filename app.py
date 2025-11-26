@@ -17,6 +17,9 @@ st.set_page_config(
 # Custom CSS for a modern look with a blurry background effect
 st.markdown("""
 <style>
+    /* 1. Import Poppins Font for the Title (Unique aesthetic font) */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
     /* Blurred background effect */
     .stApp {
         background: url("https://images.unsplash.com/photo-1759735541612-18736db330e9?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
@@ -55,11 +58,12 @@ st.markdown("""
 
     /* Title and Header styling */
     h1 {
-        font-size: 3.5rem; /* Increased title font size */
+        font-size: 4.5rem; /* Significantly increased title font size for impact */
+        font-family: 'Poppins', sans-serif; /* Aesthetic unique font */
         color: #1a73e8; /* Google Blue */
         text-align: center;
         margin-bottom: 0.5rem;
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4); /* Stronger text shadow for clarity */
     }
     
     /* Specific styling for the overview text (Dark box, white text) */
