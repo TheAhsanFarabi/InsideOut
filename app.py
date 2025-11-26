@@ -44,13 +44,15 @@ st.markdown("""
 
     /* Main Streamlit container styling - Changed to dark, semi-transparent block */
     .main .block-container {
-        /* CHANGED: Dark gray background for content block to maintain dark theme */
+        /* FIX: INCREASED WIDTH and PADDING to make the center content less cramped */
+        max-width: 1200px !important; /* Enforce a much wider maximum width */
+        
         background-color: rgba(50, 50, 50, 0.95); 
         border-radius: 1rem;
         padding-top: 2rem;
         padding-bottom: 2rem;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+        padding-left: 3rem;   /* Increased padding */
+        padding-right: 3rem;  /* Increased padding */
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8); /* Stronger shadow for more pop */
         margin-top: 2rem;
         margin-bottom: 2rem;
@@ -58,7 +60,7 @@ st.markdown("""
 
     /* Title and Header styling - ADDED !important for enforcement */
     h1 {
-        font-size: 4.5rem !important; /* ENFORCED: Significantly increased title font size for impact */
+        font-size: 5.5rem !important; /* ENFORCED: Significantly increased title font size for impact */
         font-family: 'Poppins', sans-serif !important; /* ENFORCED: Aesthetic unique font */
         color: #1a73e8; /* Google Blue */
         text-align: center;
