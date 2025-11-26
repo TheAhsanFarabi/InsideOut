@@ -197,9 +197,9 @@ st.markdown("""
 st.title("InsideOut: An Emotion Recognition System")
 st.markdown("""
 <div class="overview-text">
-Welcome to **InsideOut**, a real-time emotion recognition system.
+Welcome to InsideOut, a real-time emotion recognition system.
 Upload an image or take a live photo, and let the AI detect facial emotions instantly!
-Supported emotions: **Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.**
+Supported emotions: Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.
 </div>
 """, unsafe_allow_html=True)
 
