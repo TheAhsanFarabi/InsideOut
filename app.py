@@ -56,9 +56,9 @@ st.markdown("""
         margin-bottom: 2rem;
     }
 
-    /* Title and Header styling */
+    /* Title and Header styling - INCREASED FONT SIZE to 5.5rem */
     h1 {
-        font-size: 4.5rem; /* Significantly increased title font size for impact */
+        font-size: 5.5rem; /* Significantly increased title font size for impact */
         font-family: 'Poppins', sans-serif; /* Aesthetic unique font */
         color: #1a73e8; /* Google Blue */
         text-align: center;
