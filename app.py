@@ -42,24 +42,24 @@ st.markdown("""
         z-index: -1; /* Ensures it sits behind the Streamlit content */
     }
 
-    /* Main Streamlit container styling - Semi-transparent white content block */
+    /* Main Streamlit container styling - Changed to dark, semi-transparent block */
     .main .block-container {
-        /* Increased opacity slightly for better contrast against dark background */
-        background-color: rgba(255, 255, 255, 0.95); 
+        /* CHANGED: Dark gray background for content block to maintain dark theme */
+        background-color: rgba(50, 50, 50, 0.95); 
         border-radius: 1rem;
         padding-top: 2rem;
         padding-bottom: 2rem;
         padding-left: 1.5rem;
         padding-right: 1.5rem;
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* Stronger shadow for more pop */
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8); /* Stronger shadow for more pop */
         margin-top: 2rem;
         margin-bottom: 2rem;
     }
 
-    /* Title and Header styling - INCREASED FONT SIZE to 5.5rem */
+    /* Title and Header styling - ADDED !important for enforcement */
     h1 {
-        font-size: 5.5rem; /* Significantly increased title font size for impact */
-        font-family: 'Poppins', sans-serif; /* Aesthetic unique font */
+        font-size: 5.5rem !important; /* ENFORCED: Significantly increased title font size for impact */
+        font-family: 'Poppins', sans-serif !important; /* ENFORCED: Aesthetic unique font */
         color: #1a73e8; /* Google Blue */
         text-align: center;
         margin-bottom: 0.5rem;
@@ -102,33 +102,41 @@ st.markdown("""
         margin-top: 10px;
     }
 
-    /* Default paragraph styling (for other paragraphs inside light container) */
-    .stMarkdown p {
+    /* Default paragraph styling - CHANGED to white/light gray for readability inside dark container */
+    .stMarkdown p, .stMarkdown, .stSubheader {
         font-size: 1.1rem;
-        color: #212529; /* Even darker grey text for maximum readability */
+        color: #f8f8f8; /* Light text for visibility against dark container background */
         text-align: center;
     }
 
-    /* Info box styling (kept for standard Streamlit messages like warnings/success) */
+    /* Info box styling (for standard Streamlit warnings/success messages) - Light background retained for high contrast */
     div[data-testid="stAlert"] {
         border-radius: 0.5rem;
         border-left: 8px solid #fbbc05; /* Google Yellow */
         background-color: rgba(255, 250, 220, 0.98); /* Near opaque background */
     }
 
-    /* File uploader and camera input container */
+    /* File uploader and camera input container - CHANGED to dark theme */
     div[data-testid="stFileUploader"] > div:first-child, div[data-testid="stCameraInput"] > div:first-child {
         border: 2px dashed #aab0b6; 
         border-radius: 0.75rem;
         padding: 1.5rem;
         text-align: center;
-        background-color: rgba(248, 249, 250, 0.98); /* Near opaque light background */
+        /* CHANGED: Dark background for input containers */
+        background-color: rgba(70, 70, 70, 0.98); 
+        color: #e8eaed; /* Light text inside input containers */
         transition: all 0.3s ease;
     }
-
+    
+    /* Input container hover state */
     div[data-testid="stFileUploader"] > div:first-child:hover, div[data-testid="stCameraInput"] > div:first-child:hover {
-        background-color: rgba(241, 243, 244, 1); 
+        background-color: rgba(80, 80, 80, 1); 
         border-color: #1a73e8; 
+    }
+    
+    /* File uploader button text color fix */
+    div[data-testid="stFileUploader"] p {
+        color: #e8eaed;
     }
 
     /* Result image border */
@@ -141,19 +149,33 @@ st.markdown("""
     .emotion-Angry { color: #dc3545; font-weight: bold; }
     .emotion-Happy { color: #28a745; font-weight: bold; }
     .emotion-Surprise { color: #ffc107; font-weight: bold; }
-    .emotion-Neutral { color: #6c757d; font-weight: bold; }
+    .emotion-Neutral { color: #aaaaaa; font-weight: bold; } /* Slightly brighter neutral for dark background */
     .emotion-Sad { color: #007bff; font-weight: bold; }
     .emotion-Fear { color: #6f42c1; font-weight: bold; }
     .emotion-Disgust { color: #20c997; font-weight: bold; }
 
-    /* Custom detailed result box styling */
+    /* Custom detailed result box styling - CHANGED to dark theme */
     div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) { 
-        background-color: rgba(241, 243, 244, 0.98); /* Near opaque light gray background */
-        border: 1px solid #e8eaed;
+        /* CHANGED: Dark background for the result detail box */
+        background-color: rgba(40, 40, 40, 0.98); 
+        border: 1px solid #555;
         border-radius: 0.75rem;
         padding: 15px;
         margin-top: 15px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); 
+    }
+    
+    /* Text inside the result detail box must also be light */
+    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) p, 
+    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) ul,
+    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) li,
+    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) summary {
+        color: #f8f8f8 !important; /* Enforce light text */
+    }
+    
+    /* Header color inside the result detail box */
+    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) h3 {
+        color: #1a73e8 !important;
     }
     
 </style>
@@ -308,14 +330,14 @@ if image_data is not None:
             
             st.markdown(
                 f"""
-                <div style="border: 1px solid #dadce0; border-radius: 8px; padding: 10px; margin-top: 10px; background-color: rgba(255, 255, 255, 0.7);">
+                <div style="border: 1px solid #dadce0; border-radius: 8px; padding: 10px; margin-top: 10px; background-color: rgba(40, 40, 40, 0.98);">
                     <h3 style="margin-top: 0; font-size: 1.25rem; color: #1a73e8;">Face at ({x}, {y})</h3>
-                    <p style="text-align: left; margin-bottom: 5px; color: #3c4043;">
+                    <p style="text-align: left; margin-bottom: 5px; color: #f8f8f8;">
                         <strong>Primary Emotion:</strong> <span class="emotion-{emotion}">{emotion} ({confidence*100:.1f}%)</span>
                     </p>
                     <details>
-                        <summary style="color: #5f6368;">Top 3 Probabilities</summary>
-                        <ul style="color: #3c4043;">
+                        <summary style="color: #bdc1c6;">Top 3 Probabilities</summary>
+                        <ul style="color: #f8f8f8;">
                             {''.join([f'<li><span class="emotion-{e[0]}">{e[0]}</span>: {e[1]*100:.1f}%</li>' for e in top_emotions[:3]])}
                         </ul>
                     </details>
