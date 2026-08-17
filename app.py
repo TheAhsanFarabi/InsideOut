@@ -14,193 +14,17 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for a modern look with a blurry background effect
-st.markdown("""
-<style>
-    /* 1. Import Poppins Font for the Title (Unique aesthetic font) */
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
 
-    /* Blurred background effect */
-    .stApp {
-        background: url("https://images.unsplash.com/photo-1759735541612-18736db330e9?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-        background-size: cover;
-        background-attachment: fixed;
-        background-position: center;
-    }
-
-    /* Apply EXTREME blur effect and darkening for visibility */
-    .stApp::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: inherit;
-        /* INCREASED BLUR and DARKENING to make the change visible */
-        filter: blur(35px) brightness(20%); 
-        z-index: -1; /* Ensures it sits behind the Streamlit content */
-    }
-
-    /* Main Streamlit container styling - Changed to dark, semi-transparent block */
-    .main .block-container {
-        /* UPDATED: Increased max-width again to 1400px for title and content spacing */
-        max-width: 1400px !important; 
-        
-        background-color: rgba(50, 50, 50, 0.95); 
-        border-radius: 1rem;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-        padding-left: 3rem;   
-        padding-right: 3rem;  
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8); 
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    /* Title and Header styling - ADDED !important for enforcement */
-    h1 {
-        /* UPDATED: Aggressively reduced font size to 2.5rem to ensure the long title fits on one line universally. */
-        font-size: 4rem !important; 
-        font-family: 'Poppins', sans-serif !important; 
-        color: #1a73e8; /* Google Blue */
-        text-align: center;
-        margin-bottom: 0.5rem;
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4); 
-    }
-    
-    /* Specific styling for the overview text (Dark box, white text) */
-    .overview-text {
-        font-size: 1.25rem; 
-        color: #FFFFFF; 
-        text-align: center;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); 
-        background-color: rgba(0, 0, 0, 0.5); 
-        padding: 15px;
-        border-radius: 0.75rem;
-        margin-bottom: 1.5rem; 
-    }
-    
-    /* NEW FIX: Ensure bold text (rendered as <strong> or <b>) is highly visible and bold inside the overview box. */
-    .overview-text strong, .overview-text b {
-        font-weight: 900 !important; /* Force black bold font weight */
-        color: #FFFFFF !important; /* Changed to White for high visibility */
-    }
-
-    /* Custom styling for the initial state message (matching dark theme) */
-    .dark-info-box {
-        font-size: 1.15rem; 
-        color: #e8eaed; 
-        text-align: center;
-        background-color: rgba(26, 35, 43, 0.85); 
-        padding: 15px;
-        border-radius: 0.75rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Custom styling for the dark footer */
-    .footer-dark {
-        text-align: center; 
-        color: #bdc1c6; 
-        font-size: 0.85rem; 
-        background-color: rgba(26, 35, 43, 0.8); 
-        padding: 10px; 
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
-        margin-top: 10px;
-    }
-
-    /* Default paragraph styling - CHANGED to white/light gray for readability inside dark container */
-    .stMarkdown p, .stMarkdown, .stSubheader {
-        font-size: 1.1rem;
-        color: #f8f8f8; 
-        text-align: center;
-    }
-
-    /* Info box styling (for standard Streamlit warnings/success messages) - Light background retained for high contrast */
-    div[data-testid="stAlert"] {
-        border-radius: 0.5rem;
-        border-left: 8px solid #fbbc05; /* Google Yellow */
-        background-color: rgba(255, 250, 220, 0.98); 
-    }
-
-    /* File uploader and camera input container - CHANGED to dark theme */
-    div[data-testid="stFileUploader"] > div:first-child, div[data-testid="stCameraInput"] > div:first-child {
-        border: 2px dashed #aab0b6; 
-        border-radius: 0.75rem;
-        padding: 1.5rem;
-        text-align: center;
-        /* CHANGED: Dark background for input containers */
-        background-color: rgba(70, 70, 70, 0.98); 
-        color: #e8eaed; 
-        transition: all 0.3s ease;
-    }
-    
-    /* Input container hover state */
-    div[data-testid="stFileUploader"] > div:first-child:hover, div[data-testid="stCameraInput"] > div:first-child:hover {
-        background-color: rgba(80, 80, 80, 1); 
-        border-color: #1a73e8; 
-    }
-    
-    /* File uploader button text color fix */
-    div[data-testid="stFileUploader"] p {
-        color: #e8eaed;
-    }
-
-    /* Result image border */
-    div.stImage img {
-        border-radius: 1rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35); 
-    }
-    
-    /* Emotion label color coding */
-    .emotion-Angry { color: #dc3545; font-weight: bold; }
-    .emotion-Happy { color: #28a745; font-weight: bold; }
-    .emotion-Surprise { color: #ffc107; font-weight: bold; }
-    .emotion-Neutral { color: #aaaaaa; font-weight: bold; } 
-    .emotion-Sad { color: #007bff; font-weight: bold; }
-    .emotion-Fear { color: #6f42c1; font-weight: bold; }
-    .emotion-Disgust { color: #20c997; font-weight: bold; }
-
-    /* Custom detailed result box styling - CHANGED to dark theme */
-    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) { 
-        /* CHANGED: Dark background for the result detail box */
-        background-color: rgba(40, 40, 40, 0.98); 
-        border: 1px solid #555;
-        border-radius: 0.75rem;
-        padding: 15px;
-        margin-top: 15px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); 
-    }
-    
-    /* Text inside the result detail box must also be light */
-    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) p, 
-    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) ul,
-    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) li,
-    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) summary {
-        color: #f8f8f8 !important; 
-    }
-    
-    /* Header color inside the result detail box */
-    div.stMarkdown > div > div > div[data-testid^="stVerticalBlock"] > div:has(h3) h3 {
-        color: #1a73e8 !important;
-    }
-    
-</style>
-""", unsafe_allow_html=True)
 
 # -------------------------
 # Project Title & Overview
 # -------------------------
 st.title("InsideOut: An Emotion Recognition System")
 st.markdown("""
-<div class="overview-text">
-Welcome to <strong>InsideOut</strong>, a real-time emotion recognition system.
+Welcome to **InsideOut**, a real-time emotion recognition system.
 Upload an image or take a live photo, and let the AI detect facial emotions instantly!
-Supported emotions: <strong>Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.</strong>
-</div>
-""", unsafe_allow_html=True)
+Supported emotions: **Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.**
+""")
 
 # --- Separator ---
 st.markdown("---")
@@ -337,22 +161,12 @@ if image_data is not None:
             top_indices = np.argsort(prediction[0])[-len(CLASS_LABELS):][::-1]
             top_emotions = [(CLASS_LABELS[i], prediction[0][i]) for i in top_indices]
             
-            st.markdown(
-                f"""
-                <div style="border: 1px solid #dadce0; border-radius: 8px; padding: 10px; margin-top: 10px; background-color: rgba(40, 40, 40, 0.98);">
-                    <h3 style="margin-top: 0; font-size: 1.25rem; color: #1a73e8;">Face at ({x}, {y})</h3>
-                    <p style="text-align: left; margin-bottom: 5px; color: #f8f8f8;">
-                        <strong>Primary Emotion:</strong> <span class="emotion-{emotion}">{emotion} ({confidence*100:.1f}%)</span>
-                    </p>
-                    <details>
-                        <summary style="color: #bdc1c6;">Top 3 Probabilities</summary>
-                        <ul style="color: #f8f8f8;">
-                            {''.join([f'<li><span class="emotion-{e[0]}">{e[0]}</span>: {e[1]*100:.1f}%</li>' for e in top_emotions[:3]])}
-                        </ul>
-                    </details>
-                </div>
-                """, unsafe_allow_html=True
-            )
+            st.subheader(f"Face at ({x}, {y})")
+            st.write(f"**Primary Emotion:** {emotion} ({confidence*100:.1f}%)")
+            
+            with st.expander("Top 3 Probabilities"):
+                for e in top_emotions[:3]:
+                    st.write(f"- {e[0]}: {e[1]*100:.1f}%")
 
 
         # 4. Display the Result
@@ -361,21 +175,11 @@ if image_data is not None:
         st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", use_container_width=True)
 
 else:
-    # Initial state message - Replaced st.info with custom dark markdown box
-    st.markdown("""
-    <div class="dark-info-box">
-        <strong>Please upload an image or take a picture to begin the emotion detection.</strong>
-    </div>
-    """, unsafe_allow_html=True)
+    # Initial state message
+    st.info("Please upload an image or take a picture to begin the emotion detection.")
     
 # -------------------------
 # Footer / Credits
 # -------------------------
 st.markdown("---")
-st.markdown(
-    """
-    <div class='footer-dark'>
-        Powered by Keras, OpenCV, and Streamlit. Model: InsideOut by Ahsan Farabi.
-    </div>
-    """, unsafe_allow_html=True
-)
+st.caption("Powered by Keras, OpenCV, and Streamlit. Model: InsideOut by Ahsan Farabi.")
