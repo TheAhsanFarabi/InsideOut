@@ -172,7 +172,7 @@ if image_data is not None:
         # 4. Display the Result
         st.markdown("---")
         st.subheader("Processed Image Result") 
-        st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", use_container_width=True)
+        st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", width="stretch")
 
 else:
     # Initial state message
