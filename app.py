@@ -176,7 +176,7 @@ with tab2:
                         
         st.markdown("---")
         st.subheader("Processed Image Result") 
-        st.image(cv2.cvtColor(processed_frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", use_container_width=True)
+        st.image(cv2.cvtColor(processed_frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", width="stretch")
 
 # -------------------------
 # Footer / Credits
