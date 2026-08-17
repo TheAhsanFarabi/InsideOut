@@ -8,6 +8,10 @@ import requests
 from pathlib import Path
 from streamlit_webrtc import webrtc_streamer
 import av
+import threading
+
+# Global lock for thread-safe TensorFlow inference
+inference_lock = threading.Lock()
 
 # --- Configuration & Styling ---
 st.set_page_config(
@@ -82,7 +86,9 @@ def process_frame(frame_bgr):
         face_resized = np.expand_dims(face_resized, axis=0)   
         face_resized = face_resized / 255.0                  
 
-        prediction = model.predict(face_resized, verbose=0)
+        with inference_lock:
+            prediction = model(face_resized, training=False).numpy()
+            
         emotion_index = np.argmax(prediction)
         emotion = CLASS_LABELS[emotion_index]
         confidence = np.max(prediction)
