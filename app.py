@@ -6,12 +6,6 @@ from PIL import Image
 import os
 import requests
 from pathlib import Path
-from streamlit_webrtc import webrtc_streamer
-import av
-import threading
-
-# Global lock for thread-safe TensorFlow inference
-inference_lock = threading.Lock()
 
 # --- Configuration & Styling ---
 st.set_page_config(
@@ -20,16 +14,19 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+
+
 # -------------------------
 # Project Title & Overview
 # -------------------------
 st.title("InsideOut: An Emotion Recognition System")
 st.markdown("""
 Welcome to **InsideOut**, a real-time emotion recognition system.
-Use your webcam for live emotion detection, or upload a static image!
+Upload an image or take a live photo, and let the AI detect facial emotions instantly!
 Supported emotions: **Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise.**
 """)
 
+# --- Separator ---
 st.markdown("---")
 
 # -------------------------
@@ -49,7 +46,7 @@ def download_and_load_model():
         with st.spinner("⏳ Downloading AI model (25MB)... This may take a moment."):
             try:
                 response = requests.get(MODEL_URL, stream=True)
-                response.raise_for_status() 
+                response.raise_for_status() # Check for request errors
                 with open(MODEL_LOCAL_PATH, "wb") as f:
                     for chunk in response.iter_content(chunk_size=8192):
                         f.write(chunk)
@@ -59,127 +56,130 @@ def download_and_load_model():
                 return None, None
                 
     model = load_model(str(MODEL_LOCAL_PATH))
+    # Load OpenCV's default frontal face detection cascade
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
     return model, face_cascade
 
+# Load resources
 model, face_cascade = download_and_load_model()
 
+# Check if model loading was successful
 if model is None or face_cascade is None:
     st.stop()
 
 # -------------------------
-# Core Processing Function
+# Input Options (Using columns for better layout)
 # -------------------------
-def process_frame(frame_bgr):
-    """Detects faces, predicts emotions, and draws bounding boxes."""
-    gray = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2GRAY)
+col1, col2 = st.columns(2)
+
+with col1:
+    uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "jpeg", "png"])
+
+with col2:
+    camera_input = st.camera_input("Take a Live Picture")
+
+# Determine the source of the image data
+image_data = uploaded_file if uploaded_file else camera_input
+
+# --- Separator ---
+st.markdown("---")
+
+# -------------------------
+# Processing Image
+# -------------------------
+if image_data is not None:
+    # 1. Image Loading and Conversion
+    try:
+        image = Image.open(image_data).convert("RGB")
+    except Exception as e:
+        st.error(f"Error loading image: {e}")
+        st.stop()
+        
+    open_cv_image = np.array(image)
+    # Convert RGB image (from PIL/Streamlit) to BGR (for OpenCV)
+    frame = cv2.cvtColor(open_cv_image, cv2.COLOR_RGB2BGR)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # 2. Face Detection
     faces = face_cascade.detectMultiScale(
-        gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30)
-    )
-    
-    face_details = []
-    
-    for (x, y, w, h) in faces:
-        face_roi = gray[y:y + h, x:x + w]
-        face_resized = cv2.resize(face_roi, (48, 48))
-        face_resized = np.expand_dims(face_resized, axis=-1)  
-        face_resized = np.expand_dims(face_resized, axis=0)   
-        face_resized = face_resized / 255.0                  
-
-        with inference_lock:
-            prediction = model(face_resized, training=False).numpy()
-            
-        emotion_index = np.argmax(prediction)
-        emotion = CLASS_LABELS[emotion_index]
-        confidence = np.max(prediction)
-        
-        top_indices = np.argsort(prediction[0])[-len(CLASS_LABELS):][::-1]
-        top_emotions = [(CLASS_LABELS[i], prediction[0][i]) for i in top_indices]
-        
-        face_details.append({
-            'coords': (x, y, w, h),
-            'emotion': emotion,
-            'confidence': confidence,
-            'top_emotions': top_emotions
-        })
-
-        color_map = {
-            'Happy': (40, 200, 255), 'Angry': (0, 0, 255), 'Sad': (255, 0, 0),
-            'Surprise': (0, 255, 255), 'Neutral': (128, 128, 128),
-            'Fear': (0, 69, 255), 'Disgust': (0, 255, 0)
-        }
-        color = color_map.get(emotion, (0, 255, 0))
-
-        cv2.rectangle(frame_bgr, (x, y), (x + w, y + h), color, 2)
-        label = f"{emotion} ({confidence*100:.1f}%)"
-        (text_w, text_h), baseline = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
-        cv2.rectangle(frame_bgr, (x, y - text_h - baseline - 10), (x + text_w + 10, y), color, -1)
-        cv2.putText(frame_bgr, label, (x + 5, y - baseline - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
-        
-    return frame_bgr, face_details
-
-# -------------------------
-# UI Layout (Tabs)
-# -------------------------
-tab1, tab2 = st.tabs(["🎥 Live Video (WebRTC)", "🖼️ Static Image"])
-
-with tab1:
-    st.info("Click 'Start' to allow webcam access and begin live emotion detection.")
-    
-    def video_frame_callback(frame):
-        img = frame.to_ndarray(format="bgr24")
-        processed_img, _ = process_frame(img)
-        return av.VideoFrame.from_ndarray(processed_img, format="bgr24")
-
-    webrtc_streamer(
-        key="emotion-detection",
-        video_frame_callback=video_frame_callback,
-        rtc_configuration={
-            "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-        },
-        media_stream_constraints={"video": True, "audio": False}
+        gray,
+        scaleFactor=1.1,  
+        minNeighbors=5,
+        minSize=(30, 30)
     )
 
-with tab2:
-    col1, col2 = st.columns(2)
-    with col1:
-        uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "jpeg", "png"])
-    with col2:
-        camera_input = st.camera_input("Take a Static Picture")
-        
-    image_data = uploaded_file if uploaded_file else camera_input
+    detected_faces_count = len(faces)
     
-    if image_data is not None:
-        try:
-            image = Image.open(image_data).convert("RGB")
-        except Exception as e:
-            st.error(f"Error loading image: {e}")
-            st.stop()
-            
-        open_cv_image = np.array(image)
-        frame = cv2.cvtColor(open_cv_image, cv2.COLOR_RGB2BGR)
+    if detected_faces_count == 0:
+        st.warning("No faces detected in the image. Please try another one.")
+    else:
+        st.success(f"Detected {detected_faces_count} face(s). Processing emotions...")
         
-        processed_frame, details = process_frame(frame)
-        
-        if len(details) == 0:
-            st.warning("No faces detected in the image. Please try another one.")
-        else:
-            st.success(f"Detected {len(details)} face(s). Processing emotions...")
+        # 3. Emotion Prediction and Drawing
+        for (x, y, w, h) in faces:
+            # Extract face ROI (Region of Interest)
+            face_roi = gray[y:y + h, x:x + w]
             
-            for face in details:
-                x, y, w, h = face['coords']
-                st.subheader(f"Face at ({x}, {y})")
-                st.write(f"**Primary Emotion:** {face['emotion']} ({face['confidence']*100:.1f}%)")
-                with st.expander("Top 3 Probabilities"):
-                    for e in face['top_emotions'][:3]:
-                        st.write(f"- {e[0]}: {e[1]*100:.1f}%")
-                        
+            # Preprocessing for the Keras model
+            face_resized = cv2.resize(face_roi, (48, 48))
+            face_resized = np.expand_dims(face_resized, axis=-1)  
+            face_resized = np.expand_dims(face_resized, axis=0)   
+            face_resized = face_resized / 255.0                  
+
+            # Make prediction
+            prediction = model.predict(face_resized, verbose=0)
+            emotion_index = np.argmax(prediction)
+            emotion = CLASS_LABELS[emotion_index]
+            confidence = np.max(prediction)
+
+            # Draw rectangle and label
+            # Use a dynamic color based on the emotion
+            color_map = {
+                'Happy': (40, 200, 255),    # Light Blue/Yellow BGR
+                'Angry': (0, 0, 255),       # Red BGR
+                'Sad': (255, 0, 0),         # Blue BGR
+                'Surprise': (0, 255, 255),  # Yellow BGR
+                'Neutral': (128, 128, 128), # Gray BGR
+                'Fear': (0, 69, 255),       # Orange BGR 
+                'Disgust': (0, 255, 0)      # Green BGR
+            }
+            color = color_map.get(emotion, (0, 255, 0)) # Default Green
+
+            cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
+            label = f"{emotion} ({confidence*100:.1f}%)"
+            
+            # Calculate text size for background box
+            (text_w, text_h), baseline = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
+            
+            # Draw a filled rectangle as a background for the text
+            cv2.rectangle(frame, (x, y - text_h - baseline - 10), (x + text_w + 10, y), color, -1)
+            
+            # Draw the text label
+            cv2.putText(frame, label, (x + 5, y - baseline - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2)
+            
+            # Optional: Display top predictions for each face
+            top_indices = np.argsort(prediction[0])[-len(CLASS_LABELS):][::-1]
+            top_emotions = [(CLASS_LABELS[i], prediction[0][i]) for i in top_indices]
+            
+            st.subheader(f"Face at ({x}, {y})")
+            st.write(f"**Primary Emotion:** {emotion} ({confidence*100:.1f}%)")
+            
+            with st.expander("Top 3 Probabilities"):
+                for e in top_emotions[:3]:
+                    st.write(f"- {e[0]}: {e[1]*100:.1f}%")
+
+
+        # 4. Display the Result
         st.markdown("---")
         st.subheader("Processed Image Result") 
-        st.image(cv2.cvtColor(processed_frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", width="stretch")
+        st.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), caption="Emotion Detection Result", use_container_width=True)
 
+else:
+    # Initial state message
+    st.info("Please upload an image or take a picture to begin the emotion detection.")
+    
 # -------------------------
 # Footer / Credits
 # -------------------------
 st.markdown("---")
-st.caption("Powered by Keras, OpenCV, WebRTC, and Streamlit. Model: InsideOut by Ahsan Farabi.")
+st.caption("Powered by Keras, OpenCV, and Streamlit. Model: InsideOut by Ahsan Farabi.")
